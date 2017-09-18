@@ -213,3 +213,44 @@ TEST(Image, ComputeCartesian)
                          z_cam.end<std::int16_t>(),
                          z_computed.begin<std::int16_t>(), cmp));
 }
+
+TEST(Image, IlluTemp)
+{
+	ifm3d::Camera::Ptr cam = std::make_shared<ifm3d::Camera>();
+	cam->FromJSONStr(R"(
+        {
+          "ifm3d":
+          {
+            "Device":
+            {
+              "ActiveApplication": "1"
+            },
+            "Apps":
+            [
+              {
+                "TriggerMode": "1",
+                "Index": "1",
+                "Imager":
+                {
+                    "ExposureTime": "5000",
+                    "ExposureTimeList": "125;5000",
+                    "ExposureTimeRatio": "40",
+                    "Type":"under5m_moderate"
+                }
+              }
+           ]
+          }
+        }
+      )");
+
+	ifm3d::ImageBuffer::Ptr img = std::make_shared<ifm3d::ImageBuffer>();
+	ifm3d::FrameGrabber::Ptr fg =
+		std::make_shared<ifm3d::FrameGrabber>(
+			cam, ifm3d::DEFAULT_SCHEMA_MASK | ifm3d::ILLU_TEMP);
+
+	EXPECT_TRUE(fg->WaitForFrame(img.get(), 1000));
+	float illu_temp = img->IlluTemp();
+
+	EXPECT_GT(illu_temp, 10);
+	EXPECT_LT(illu_temp, 90);
+}

@@ -138,6 +138,14 @@ namespace ifm3d
     std::vector<std::uint32_t> ExposureTimes();
 
     /**
+     * Returns the temperature of the illumination unit.
+     *
+     * NOTE: To get the temperature of the illumination unit to the frame, you
+     * need to make sure your current pcic schema asks for it.
+     */
+    float IlluTemp();
+
+    /**
      * Synchronizes the parsed out image data with the internally wrapped byte
      * buffer.
      */
@@ -146,6 +154,8 @@ namespace ifm3d
   private:
     class Impl;
     std::unique_ptr<Impl> pImpl;
+    std::vector<float> extrinsics_;
+    std::vector<std::uint32_t> exposure_times_;
 
   }; // end: class ImageBuffer
 } // end: namespace ifm3d

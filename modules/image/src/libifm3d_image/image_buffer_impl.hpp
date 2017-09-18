@@ -89,7 +89,8 @@ namespace ifm3d
     pcl::PointCloud<pcl::PointXYZI>::Ptr Cloud();
     std::vector<float> Extrinsics();
     std::vector<std::uint32_t> ExposureTimes();
-
+    float IlluTemp();
+    float illu_temp_;
     void Organize(const std::vector<std::uint8_t>& bytes);
 
   protected:
@@ -103,6 +104,7 @@ namespace ifm3d
     cv::Mat ramp_;
     cv::Mat conf_;
     cv::Mat xyz_;
+
 
     template<typename T>
     void im_create(cv::Mat& im, std::uint32_t fmt, std::size_t idx,
@@ -340,6 +342,12 @@ std::vector<std::uint32_t>
 ifm3d::ImageBuffer::Impl::ExposureTimes()
 {
   return this->exposure_times_;
+}
+
+float
+ifm3d::ImageBuffer::Impl::IlluTemp()
+{
+  return this->illu_temp_;
 }
 
 //-------------------------------------
