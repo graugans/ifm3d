@@ -19,10 +19,9 @@ macro_ensure_out_of_source_build(
 include(ifm3d_version)
 find_package(PCL 1.7.1 REQUIRED COMPONENTS common io)
 find_package(OpenCV REQUIRED)
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system date_time regex)
 
 find_library(LIB_boost_system NAMES boost_system)
-
 
 # Fix this: https://bugs.launchpad.net/ubuntu/+source/vtk6/+bug/1573234
 list(FIND PCL_IO_LIBRARIES "vtkproj4" VTKPROJ4_REQUIRED)
@@ -57,7 +56,49 @@ add_definitions(
 ################################################
 ## Build the examples
 ################################################
+add_executable(ex-cartesian ex-cartesian.cpp)
+target_link_libraries(ex-cartesian
+                     ifm3d_camera_shared
+                     ifm3d_framegrabber_shared
+                     ifm3d_image_shared
+                     ${OpenCV_LIBRARIES}
+                     ${Boost_LIBRARIES}
+                     )
+add_executable(ex-cartesian_compare ex-cartesian_compare.cpp)
+target_link_libraries(ex-cartesian_compare
+                     ifm3d_camera_shared
+                     ifm3d_framegrabber_shared
+                     ifm3d_image_shared
+                     ${OpenCV_LIBRARIES}
+                     ${PCL_IO_LIBRARIES}
+                     ${Boost_LIBRARIES}
+                     )
 
+add_executable(ex-framegrabber_recycling ex-framegrabber_recycling.cpp)
+target_link_libraries(ex-framegrabber_recycling
+                     ifm3d_camera_shared
+                     ifm3d_framegrabber_shared
+                     ${Boost_LIBRARIES}
+                     )
+
+add_executable(ex-exposure_times ex-exposure_times.cpp)
+target_link_libraries(ex-exposure_times
+                     ifm3d_camera_shared
+                     ifm3d_framegrabber_shared
+                     ifm3d_image_shared
+                     ${PCL_COMMON_LIBRARIES}
+                     ${OpenCV_LIBRARIES}
+                     )
+
+add_executable(ex-fast_app_switch ex-fast_app_switch.cpp)
+target_link_libraries(ex-fast_app_switch
+                     ifm3d_image_shared
+                     ifm3d_framegrabber_shared
+                     ifm3d_camera_shared
+                     ifm3d_pcicclient_shared
+                     ${OpenCV_LIBRARIES}
+                     ${Boost_LIBRARIES}
+                      )
 add_executable(ex-file_io ex-file_io.cpp)
 target_link_libraries(ex-file_io
                       ifm3d_image_shared
