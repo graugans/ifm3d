@@ -99,6 +99,10 @@ const unsigned int ifm3d::O3D_TMP_PARAMS_SUPPORT_MAJOR = 1;
 const unsigned int ifm3d::O3D_TMP_PARAMS_SUPPORT_MINOR = 20;
 const unsigned int ifm3d::O3D_TMP_PARAMS_SUPPORT_PATCH = 0;
 
+const unsigned int ifm3d::O3D_INTRINSIC_PARAM_SUPPORT_MAJOR = 1;
+const unsigned int ifm3d::O3D_INTRINSIC_PARAM_SUPPORT_MINOR = 23;
+const unsigned int ifm3d::O3D_INTRINSIC_PARAM_SUPPORT_PATCH = 0;
+
 //================================================
 // A lookup table listing the read-only camera
 // parameters
@@ -300,7 +304,7 @@ ifm3d::Camera::SetTemporaryApplicationParameters(
   // user to see if/when the temp params take effect.
   //
   if (this->IsO3D() &&
-      (! this->check_min_ifm_version(ifm3d::O3D_TMP_PARAMS_SUPPORT_MAJOR,
+      (! this->CheckMinimumFirmwareVersion(ifm3d::O3D_TMP_PARAMS_SUPPORT_MAJOR,
                                      ifm3d::O3D_TMP_PARAMS_SUPPORT_MINOR,
                                      ifm3d::O3D_TMP_PARAMS_SUPPORT_PATCH)))
     {
@@ -570,7 +574,7 @@ ifm3d::Camera::ImportIFMApp(const std::vector<std::uint8_t>& bytes)
 }
 
 bool
-ifm3d::Camera::check_min_ifm_version(unsigned int major,
+ifm3d::Camera::CheckMinimumFirmwareVersion(unsigned int major,
                                      unsigned int minor, unsigned int patch)
 {
 
@@ -633,7 +637,7 @@ ifm3d::Camera::ToJSON()
       net_info = json(this->pImpl->NetInfo());
       if (this->IsO3X() ||
           (this->IsO3D() &&
-           this->check_min_ifm_version(ifm3d::O3D_TIME_SUPPORT_MAJOR,
+           this->CheckMinimumFirmwareVersion(ifm3d::O3D_TIME_SUPPORT_MAJOR,
                                        ifm3d::O3D_TIME_SUPPORT_MINOR,
                                        ifm3d::O3D_TIME_SUPPORT_PATCH)))
         {
@@ -995,7 +999,7 @@ ifm3d::Camera::FromJSON(const json& j)
   // Time
   if (this->IsO3X() ||
       (this->IsO3D() &&
-       this->check_min_ifm_version(ifm3d::O3D_TIME_SUPPORT_MAJOR,
+       this->CheckMinimumFirmwareVersion(ifm3d::O3D_TIME_SUPPORT_MAJOR,
                                    ifm3d::O3D_TIME_SUPPORT_MINOR,
                                    ifm3d::O3D_TIME_SUPPORT_PATCH)))
     {
